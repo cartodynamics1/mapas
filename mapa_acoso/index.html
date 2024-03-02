@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="data/AlcaldasCDMX_1.js"></script>
+        <script src="data/Carpetasporcada15km2_2.js"></script>
+        <script src="data/Carpetasporcada2km_3.js"></script>
+        <script src="data/Carpetasporacososexual_4.js"></script>
+        <script>
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[19.033003567870786,-99.77404184702823],[19.606748045917232,-98.53220570616539]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        function removeEmptyRowsFromPopupContent(content, feature) {
+         var tempDiv = document.createElement('div');
+         tempDiv.innerHTML = content;
+         var rows = tempDiv.querySelectorAll('tr');
+         for (var i = 0; i < rows.length; i++) {
+             var td = rows[i].querySelector('td.visible-with-data');
+             var key = td ? td.id : '';
+             if (td && td.classList.contains('visible-with-data') && feature.properties[key] == null) {
+                 rows[i].parentNode.removeChild(rows[i]);
+             }
+         }
+         return tempDiv.innerHTML;
+        }
+        document.querySelector(".leaflet-popup-pane").addEventListener("load", function(event) {
+          var tagName = event.target.tagName,
+            popup = map._popup;
+          // Also check if flag is already set.
+          if (tagName === "IMG" && popup && !popup._updated) {
+            popup._updated = true; // Set flag to prevent looping.
+            popup.update();
+          }
+        }, true);
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_MapaBase_0');
+        map.getPane('pane_MapaBase_0').style.zIndex = 400;
+        var layer_MapaBase_0 = L.tileLayer('https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+            pane: 'pane_MapaBase_0',
+            opacity: 1.0,
+            attribution: '<a href="https://cartodb.com/basemaps/">Map tiles by CartoDB, under CC BY 3.0. Data by OpenStreetMap, under ODbL.</a>',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_MapaBase_0;
+        map.addLayer(layer_MapaBase_0);
+        function pop_AlcaldasCDMX_1(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">NOMGEO</th>\
+                        <td>' + (feature.properties['NOMGEO'] !== null ? autolinker.link(feature.properties['NOMGEO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_AlcaldasCDMX_1_0() {
+            return {
+                pane: 'pane_AlcaldasCDMX_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(229,182,54,0.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_AlcaldasCDMX_1');
+        map.getPane('pane_AlcaldasCDMX_1').style.zIndex = 401;
+        map.getPane('pane_AlcaldasCDMX_1').style['mix-blend-mode'] = 'normal';
+        var layer_AlcaldasCDMX_1 = new L.geoJson(json_AlcaldasCDMX_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_AlcaldasCDMX_1',
+            layerName: 'layer_AlcaldasCDMX_1',
+            pane: 'pane_AlcaldasCDMX_1',
+            onEachFeature: pop_AlcaldasCDMX_1,
+            style: style_AlcaldasCDMX_1_0,
+        });
+        bounds_group.addLayer(layer_AlcaldasCDMX_1);
+        map.addLayer(layer_AlcaldasCDMX_1);
+        function pop_Carpetasporcada15km2_2(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Carpetas</th>\
+                        <td>' + (feature.properties['Carpetas'] !== null ? autolinker.link(feature.properties['Carpetas'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_Carpetasporcada15km2_2_0(feature) {
+            if (feature.properties['Carpetas'] >= 1.000000 && feature.properties['Carpetas'] <= 1.000000 ) {
+                return {
+                pane: 'pane_Carpetasporcada15km2_2',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(252,251,253,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Carpetas'] >= 1.000000 && feature.properties['Carpetas'] <= 3.000000 ) {
+                return {
+                pane: 'pane_Carpetasporcada15km2_2',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(201,202,227,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Carpetas'] >= 3.000000 && feature.properties['Carpetas'] <= 8.000000 ) {
+                return {
+                pane: 'pane_Carpetasporcada15km2_2',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(124,118,182,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Carpetas'] >= 8.000000 && feature.properties['Carpetas'] <= 19.000000 ) {
+                return {
+                pane: 'pane_Carpetasporcada15km2_2',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(63,0,125,1.0)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_Carpetasporcada15km2_2');
+        map.getPane('pane_Carpetasporcada15km2_2').style.zIndex = 402;
+        map.getPane('pane_Carpetasporcada15km2_2').style['mix-blend-mode'] = 'normal';
+        var layer_Carpetasporcada15km2_2 = new L.geoJson(json_Carpetasporcada15km2_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Carpetasporcada15km2_2',
+            layerName: 'layer_Carpetasporcada15km2_2',
+            pane: 'pane_Carpetasporcada15km2_2',
+            onEachFeature: pop_Carpetasporcada15km2_2,
+            style: style_Carpetasporcada15km2_2_0,
+        });
+        bounds_group.addLayer(layer_Carpetasporcada15km2_2);
+        function pop_Carpetasporcada2km_3(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Carpetas_</th>\
+                        <td>' + (feature.properties['Carpetas_'] !== null ? autolinker.link(feature.properties['Carpetas_'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_Carpetasporcada2km_3_0(feature) {
+            if (feature.properties['Carpetas_'] >= 0.000000 && feature.properties['Carpetas_'] <= 1.000000 ) {
+                return {
+                pane: 'pane_Carpetasporcada2km_3',
+                opacity: 1,
+                color: 'rgba(185,185,185,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(116,116,116,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Carpetas_'] >= 1.000000 && feature.properties['Carpetas_'] <= 4.000000 ) {
+                return {
+                pane: 'pane_Carpetasporcada2km_3',
+                opacity: 1,
+                color: 'rgba(185,185,185,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(215,181,216,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Carpetas_'] >= 4.000000 && feature.properties['Carpetas_'] <= 9.000000 ) {
+                return {
+                pane: 'pane_Carpetasporcada2km_3',
+                opacity: 1,
+                color: 'rgba(185,185,185,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(223,101,176,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Carpetas_'] >= 9.000000 && feature.properties['Carpetas_'] <= 20.000000 ) {
+                return {
+                pane: 'pane_Carpetasporcada2km_3',
+                opacity: 1,
+                color: 'rgba(185,185,185,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(221,28,119,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Carpetas_'] >= 20.000000 && feature.properties['Carpetas_'] <= 34.000000 ) {
+                return {
+                pane: 'pane_Carpetasporcada2km_3',
+                opacity: 1,
+                color: 'rgba(185,185,185,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(152,0,67,1.0)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_Carpetasporcada2km_3');
+        map.getPane('pane_Carpetasporcada2km_3').style.zIndex = 403;
+        map.getPane('pane_Carpetasporcada2km_3').style['mix-blend-mode'] = 'normal';
+        var layer_Carpetasporcada2km_3 = new L.geoJson(json_Carpetasporcada2km_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Carpetasporcada2km_3',
+            layerName: 'layer_Carpetasporcada2km_3',
+            pane: 'pane_Carpetasporcada2km_3',
+            onEachFeature: pop_Carpetasporcada2km_3,
+            style: style_Carpetasporcada2km_3_0,
+        });
+        bounds_group.addLayer(layer_Carpetasporcada2km_3);
+        function pop_Carpetasporacososexual_4(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">fecha_hech</th>\
+                        <td>' + (feature.properties['fecha_hech'] !== null ? autolinker.link(feature.properties['fecha_hech'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">hora_hecho</th>\
+                        <td>' + (feature.properties['hora_hecho'] !== null ? autolinker.link(feature.properties['hora_hecho'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">delito</th>\
+                        <td>' + (feature.properties['delito'] !== null ? autolinker.link(feature.properties['delito'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_Carpetasporacososexual_4_0() {
+            return {
+                pane: 'pane_Carpetasporacososexual_4',
+                radius: 2.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(79,7,128,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Carpetasporacososexual_4');
+        map.getPane('pane_Carpetasporacososexual_4').style.zIndex = 404;
+        map.getPane('pane_Carpetasporacososexual_4').style['mix-blend-mode'] = 'normal';
+        var layer_Carpetasporacososexual_4 = new L.geoJson(json_Carpetasporacososexual_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Carpetasporacososexual_4',
+            layerName: 'layer_Carpetasporacososexual_4',
+            pane: 'pane_Carpetasporacososexual_4',
+            onEachFeature: pop_Carpetasporacososexual_4,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_Carpetasporacososexual_4_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Carpetasporacososexual_4);
+        map.addLayer(layer_Carpetasporacososexual_4);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/Carpetasporacososexual_4.png" /> Carpetas por acoso sexual': layer_Carpetasporacososexual_4,'Carpetas por cada 2 km<br /><table><tr><td style="text-align: center;"><img src="legend/Carpetasporcada2km_3_010.png" /></td><td>0 - 1</td></tr><tr><td style="text-align: center;"><img src="legend/Carpetasporcada2km_3_141.png" /></td><td>1 - 4</td></tr><tr><td style="text-align: center;"><img src="legend/Carpetasporcada2km_3_492.png" /></td><td>4 - 9</td></tr><tr><td style="text-align: center;"><img src="legend/Carpetasporcada2km_3_9203.png" /></td><td>9 - 20</td></tr><tr><td style="text-align: center;"><img src="legend/Carpetasporcada2km_3_20344.png" /></td><td>20 - 34</td></tr></table>': layer_Carpetasporcada2km_3,'Carpetas por cada 1.5 km2<br /><table><tr><td style="text-align: center;"><img src="legend/Carpetasporcada15km2_2_110.png" /></td><td>1 - 1</td></tr><tr><td style="text-align: center;"><img src="legend/Carpetasporcada15km2_2_131.png" /></td><td>1 - 3</td></tr><tr><td style="text-align: center;"><img src="legend/Carpetasporcada15km2_2_382.png" /></td><td>3 - 8</td></tr><tr><td style="text-align: center;"><img src="legend/Carpetasporcada15km2_2_8193.png" /></td><td>8 - 19</td></tr></table>': layer_Carpetasporcada15km2_2,'<img src="legend/AlcaldasCDMX_1.png" /> Alcaldías CDMX': layer_AlcaldasCDMX_1,"Mapa Base": layer_MapaBase_0,},{collapsed:false}).addTo(map);
+        setBounds();
+        </script>
+    </body>
+</html>
